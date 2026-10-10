@@ -114,14 +114,7 @@ const discoverWorkspacePackageDirectories = async (root) => {
 };
 
 const workspacePackageParentDirectories = (root) => {
-  const repositoryRoot = resolve(root, "../..");
-
-  return [
-    ...workspacePackageParentDirectoryNames.map((directoryName) => resolve(root, directoryName)),
-    // TUI runtime 闭包会经由 @zcode/contracts 依赖仓库根的 @zcode/shared；
-    // 只扫描 apps/zcode-cli 子 workspace 会把这个合法 workspace 误判为缺失。
-    resolve(repositoryRoot, "packages"),
-  ];
+  return workspacePackageParentDirectoryNames.map((directoryName) => resolve(root, directoryName));
 };
 
 const runtimePackageNames = async ({ root, target, workspacePackageDirectories }) => {

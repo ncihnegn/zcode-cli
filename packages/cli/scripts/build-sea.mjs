@@ -4,7 +4,7 @@ import { chmod, copyFile, mkdtemp, readFile, rm, writeFile } from "node:fs/promi
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { resolveSpawnRuntimeOptions } from "../../../../../scripts/spawn-command.mjs";
+import { resolveSpawnRuntimeOptions } from "../../../scripts/spawn-command.mjs";
 import { resolveDownloadedNodeBinary } from "./sea-node-download.mjs";
 import {
   adHocCodesignArgs,
@@ -53,7 +53,7 @@ Supported targets:
 `;
 
 const root = resolve(import.meta.dirname, "../../..");
-const repositoryRoot = resolve(root, "../..");
+const repositoryRoot = root;
 const cliRoot = resolve(import.meta.dirname, "..");
 const dist = resolve(cliRoot, "dist");
 const cliBundle = resolve(dist, "zcode.cjs");

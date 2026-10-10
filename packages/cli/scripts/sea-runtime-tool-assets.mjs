@@ -4,9 +4,9 @@ import { resolve } from "node:path";
 import {
   NATIVE_SEARCH_TOOL_VERSIONS,
   resolveNativeSearchReleasePlan,
-} from "../../../../../scripts/native-search-tools-config.mjs";
+} from "../../../scripts/native-search-tools-config.mjs";
 import { targetParts } from "./sea-targets.mjs";
-import { readNativeSearchNotices } from "../../../../../scripts/third-party-notices.mjs";
+import { readNativeSearchNotices } from "../../../scripts/third-party-notices.mjs";
 
 export const seaRuntimeToolAssetPrefix = "zcode-runtime-tools/";
 export const seaRuntimeToolManifestAssetKey = `${seaRuntimeToolAssetPrefix}manifest.json`;

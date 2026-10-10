@@ -1,4 +1,4 @@
-import { loadBuiltinProviderConfig } from "../../../../../scripts/builtin-provider-config.mjs";
+import { loadBuiltinProviderConfig } from "../../../scripts/builtin-provider-config.mjs";
 
 export const SEA_ZCODE_BUILTIN_PROVIDER_CONFIG_ASSET_KEY = "zcode-provider/zcode-builtin.json";
 

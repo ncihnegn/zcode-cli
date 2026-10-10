@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import process from "node:process";
-import { prepareNativeSearchTools } from "../../../../../scripts/prepare-native-search-tools.mjs";
-import { resolveNativeSearchReleasePlan } from "../../../../../scripts/native-search-tools-config.mjs";
+import { prepareNativeSearchTools } from "../../../scripts/prepare-native-search-tools.mjs";
+import { resolveNativeSearchReleasePlan } from "../../../scripts/native-search-tools-config.mjs";
 import { targetParts } from "./sea-targets.mjs";
 
 export const resolveSeaRuntimeToolPreparationPlan = ({ root, target }) => {
@@ -35,7 +35,7 @@ export const prepareSeaRuntimeToolAssets = async ({
       platform: plan.platform,
       arch: plan.arch,
       outputDir: plan.outputDir,
-      dependenciesDir: join(root, "apps/zcode-cli/dependencies/native-search"),
+      dependenciesDir: join(root, "dependencies/native-search"),
       env,
       prebuiltPlan,
     });
