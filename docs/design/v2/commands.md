@@ -16,6 +16,7 @@ TUI 的 slash command 候选列表见 [`tui-slash-command-suggestions.md`](./tui
 
 - `/btw <question>`: 旁路回答一个简短 side question；不创建普通 turn，不把问题或答案写入主会话上下文，不中断正在运行的主 turn。详见 [`btw-side-question.md`](./btw-side-question.md)。
 - `/compact [instructions]`: 走现有 core manual compact 路径，允许附加总结指令。
+- `/exit`: 退出当前交互式会话并关闭 CLI。带有未预期参数时返回用法提示 `Usage: /exit`；在交互式 TUI 中触发退出流程，在 headless `--prompt` 中直接以退出码 0 退出；`/quit` 是完全等价的输入别名。
 - `/expert [status|resume|stop|<task>]`: 启动或管理 expert workflow；带任务时默认把当前 session 切到 `yolo`，并通过 workflow runtime 调度多个 agent activity。
 - `/effort [list|<level>]`: 查询或切换当前 session 的 reasoning/thinking 深度；可选 level 来自当前模型 catalog/config 的 reasoning metadata。交互式 TUI 在 composer 内用类似 `/model` 的候选 popup 选择，提交显式 `/effort <level>`。`/variant` 是输入兼容别名。
 - `/fork [latest|checkpointId]`: 从 workspace checkpoint 分叉新 session；无参数或 `latest` 使用最新 checkpoint，有参数时按 checkpoint id 分叉。
@@ -80,6 +81,14 @@ ZCode app-server 的 command 广播使用 `available_commands_update` session up
 - command center 执行 `/help` 时不创建 app、不发送模型 prompt，并返回当前 command surface。
 - command center 在 history source 可用时把 `/help` 记录为 `slash_command`，但不记录 API-key login 命令。
 - 非交互 `zcode --prompt /help` 直接输出同一份 command surface，不创建 runtime。
+
+`/exit` 测试覆盖：
+
+- slash command parser 将 `/exit` 与 `/quit` 识别为已知命令，并保留原始 `rawName`。
+- command center 执行 `/exit` 时返回退出标记与退出码 0；带有参数时返回 `Usage: /exit` 提示。
+- 非交互 `zcode --prompt /exit` 或 `zcode --prompt /quit` 直接以退出码 0 退出，不创建 app。
+- 非交互 `zcode --prompt "/exit extra"` 返回错误并以退出码 1 退出。
+- TUI 提交 `/exit` 后触发 `onExit(0)` 退出交互。
 
 CLI process identity 测试覆盖：
 

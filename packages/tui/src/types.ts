@@ -152,6 +152,8 @@ export type TuiRestoredTranscriptPart =
 export type TuiSubmitPromptResult = {
   effortOptions?: readonly TuiEffortOption[];
   modelOptions?: readonly TuiModelOption[];
+  exit?: boolean;
+  exitCode?: number;
   locale?: SupportedLocale;
   loginRequired?: boolean;
   mode?: CollaborationMode;

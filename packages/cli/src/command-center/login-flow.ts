@@ -1,6 +1,6 @@
 import type { TuiSelection, TuiSubmitPrompt } from "@zcode/tui";
 import { getZCodeCopy } from "@zcode/i18n";
-import type { CommandCenterApp, CommandCenterLoginResult } from "./types.js";
+import type { CommandCenterApp, CommandCenterDeps, CommandCenterLoginResult } from "./types.js";
 import { randomUUID } from "node:crypto";
 
 export function buildLoginSelection(locale?: string): TuiSelection {
@@ -157,3 +157,13 @@ export function parseApiKeyLoginArgs(args: string): {
     providerId: kind.startsWith("bigmodel") ? "bigmodel" : "zai",
   };
 }
+
+export async function isLoginRequired(deps: CommandCenterDeps): Promise<boolean> {
+  if (!deps.hasSelectableModels) return false;
+  try {
+    return !(await deps.hasSelectableModels());
+  } catch {
+    return false;
+  }
+}
+

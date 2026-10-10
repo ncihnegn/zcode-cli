@@ -64,6 +64,7 @@ const MEMORY_BENCH_DISABLED_ERROR =
   "--memory-bench requires Project Memory to be enabled (features.memory=true and memory.use=true).";
 const TARGET_SELECTION_UNAVAILABLE_ERROR =
   "Headless goal commands cannot open an interactive replacement picker. Re-run with --target-replace or use /goal replace <objective>.";
+const EXIT_COMMAND_USAGE = "Usage: /exit";
 
 export const runPrompt = async (
   ctx: RunContext,
@@ -119,6 +120,13 @@ export const runPrompt = async (
       return 1;
     }
     return await runLogoutCommand(ctx, options, deps);
+  }
+  if (slashCommand?.type === "known" && slashCommand.name === "exit") {
+    if (slashCommand.args.length > 0) {
+      ctx.stderr.write(`${EXIT_COMMAND_USAGE}\n`);
+      return 1;
+    }
+    return 0;
   }
 
   const runtimePrompt =

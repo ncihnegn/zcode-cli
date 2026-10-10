@@ -7,6 +7,7 @@ import { formatNewSessionResult, formatResumeResult } from "./formatters.js";
 import { handleCustomCommand } from "./handlers/custom.js";
 import { handleDwfCommand } from "./handlers/dwf.js";
 import { handleEffortCommand } from "./handlers/effort.js";
+import { handleExitCommand } from "./handlers/exit.js";
 import { handleExpertCommand } from "./handlers/expert.js";
 import { handleLocaleCommand } from "./handlers/locale.js";
 import { handleMcpCommand } from "./handlers/mcp.js";
@@ -18,6 +19,7 @@ import { handleTargetCommand } from "./handlers/goal.js";
 import { recordSlashCommandInHistory } from "./history.js";
 import { attachCurrentSessionMetadata, normalizeTuiPromptInput } from "./metadata.js";
 import { buildCheckpointSelection, buildSessionSelection } from "./selections.js";
+import { parseForkTarget } from "./utils.js";
 import {
   buildManualSkillPrompt,
   formatSlashCommandHelp,
@@ -30,6 +32,7 @@ import {
   emitLoginAuthorizeMessage,
   formatLoginResult,
   formatProviderSetupResult,
+  isLoginRequired,
   loginSetupResponse,
   parseApiKeyLoginArgs,
 } from "./login-flow.js";
@@ -228,6 +231,10 @@ export function createCommandCenter(deps: CommandCenterDeps): TuiSubmitPrompt {
         return attachCurrentSessionMetadata(await app.submitPrompt(prompt, options), deps, app);
       }
 
+      if (command.name === "exit") {
+        return handleExitCommand(command.args, deps);
+      }
+
       if (command.name === "expert") {
         return handleExpertCommand(command.args, deps, options);
       }
@@ -386,17 +393,3 @@ export function createCommandCenter(deps: CommandCenterDeps): TuiSubmitPrompt {
   };
 }
 
-function parseForkTarget(args: string): string | undefined {
-  const trimmed = args.trim();
-  if (trimmed.length === 0 || trimmed === "latest") return undefined;
-  return trimmed;
-}
-
-async function isLoginRequired(deps: CommandCenterDeps): Promise<boolean> {
-  if (!deps.hasSelectableModels) return false;
-  try {
-    return !(await deps.hasSelectableModels());
-  } catch {
-    return false;
-  }
-}

@@ -21,3 +21,10 @@ export function formatTime(value: Date | number | string): string {
   if (Number.isNaN(date.getTime())) return String(value);
   return date.toISOString().replace("T", " ").slice(0, 16);
 }
+
+export function parseForkTarget(args: string): string | undefined {
+  const trimmed = args.trim();
+  if (trimmed.length === 0 || trimmed === "latest") return undefined;
+  return trimmed;
+}
+

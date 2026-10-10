@@ -526,6 +526,56 @@ test("mode composer popup can submit edit mode command", async () => {
   }
 });
 
+test("triggers onExit when submitPrompt returns exit result", async () => {
+  let view: Awaited<ReturnType<typeof testRender>> | undefined;
+  let exitedCode: number | undefined;
+
+  const options: TuiOptions = {
+    noColor: true,
+    stderr: process.stderr,
+    stdin: process.stdin,
+    stdout: process.stdout,
+    submitPrompt: async () => ({ exit: true, exitCode: 0, response: "" }),
+  };
+
+  await act(async () => {
+    view = await testRender(
+      React.createElement(TuiApp, {
+        copySelection: async () => ({ kind: "empty" }),
+        hasCopyableSelection: () => false,
+        onExit: (code) => {
+          exitedCode = code;
+        },
+        options,
+      }),
+      {
+        height: 24,
+        kittyKeyboard: true,
+        otherModifiersMode: true,
+        width: 100,
+      },
+    );
+    await view.renderOnce();
+  });
+
+  try {
+    await act(async () => {
+      assert.ok(view);
+      await view.mockInput.typeText("/exit");
+      view.mockInput.pressEnter();
+      await Promise.resolve();
+      await view.renderOnce();
+    });
+
+    assert.equal(exitedCode, 0);
+  } finally {
+    await act(async () => {
+      view?.renderer.destroy();
+    });
+  }
+});
+
+
 function reactElementChildren(node: unknown): Array<{ props?: Record<string, unknown>; type?: unknown }> {
   if (typeof node !== "object" || node === null || !("props" in node)) return [];
   const element = node as { props?: { children?: unknown } };

@@ -330,9 +330,12 @@ export function createTuiSubmitPrompt(
     activeRequestPermission = options?.requestPermission;
 
     try {
-      // Model/effort changes configure subsequent requests, including during an active turn.
+      // Model/effort/exit changes configure subsequent requests, including during an active turn.
       const command = parseSlashCommand(typeof input === "string" ? input : input.text);
-      if (command?.type === "known" && (command.name === "model" || command.name === "effort")) {
+      if (
+        command?.type === "known" &&
+        (command.name === "model" || command.name === "effort" || command.name === "exit")
+      ) {
         return {
           kind: "command_result",
           result: await submitPrompt(input, {
