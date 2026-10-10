@@ -21,3 +21,5 @@ packages/**/tests/**/*.d.ts.map
 .VSCodeCounter
 vendor
 !packages/visualize-plugin/skills/visualize/assets/vendor/
+*.tsbuildinfo
+packages/desktop/bundled-tools/
